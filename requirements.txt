@@ -5,6 +5,6 @@ pinecone==5.3.1
 firebase-admin==6.0.1
 google-cloud-storage==2.18.2
 mlxtend==0.23.1
-openai==1.50.2
+openai==0.28.1
 r2client
 boto3
