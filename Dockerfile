@@ -1,30 +1,28 @@
-# syntax=docker/dockerfile:1
-
-# 1) Build stage: install dependencies and build wheels
-FROM python:3.11-slim AS builder
-WORKDIR /app
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-# Install build tools
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc build-essential && \
-    rm -rf /var/lib/apt/lists/*
-
-COPY requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
-
-# 2) Final stage: copy wheels and application code
+# Dockerfile
 FROM python:3.11-slim
+
 WORKDIR /app
 
-# Copy compiled wheels and install them
-COPY --from=builder /wheels /wheels
-COPY requirements.txt .
-RUN pip install --no-cache /wheels/*
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy application code
+# Copy requirements first for layer caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application files
 COPY . .
 
-# Default command
+# Set environment variables (adjust as needed)
+# ENV PYTHONPATH=/app
+# ENV PYTHONUNBUFFERED=1
+
+# Expose port if needed (adjust based on your application)
+# EXPOSE 8000
+
+# Entrypoint (adjust based on your main application)
 CMD ["python", "lambda_function.py"]
+# or
+# CMD ["python", "agents/main.py"]
