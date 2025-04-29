@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
 RUN mkdir -p /app/recommendation_objects
+
 COPY recommendation/* /app/recommendation_objects/
 COPY . .
 
