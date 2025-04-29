@@ -36,11 +36,6 @@ jobs:
       run: |
         docker build -t ${{ env.CONTAINER_NAME }} .
 
-    - name: Tag Docker image
-      run: |
-        docker tag ${{ env.CONTAINER_NAME }}:latest \
-        ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSIT }}:${{ github.sha }}
-
     - name: Push Docker image
       run: |
         docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSIT }}:${{ github.sha }}
