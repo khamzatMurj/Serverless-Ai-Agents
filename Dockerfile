@@ -13,6 +13,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
+COPY recommendation /app/recommendation
 COPY . .
 
 # Set environment variables (adjust as needed)
