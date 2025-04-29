@@ -3,7 +3,6 @@ name: Build and Push to ECR
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 env:
   AWS_REGION: eu-west-3
@@ -14,8 +13,8 @@ jobs:
   build-push:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       packages: write
+      contents: read
 
     steps:
     - name: Checkout code
@@ -34,9 +33,13 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ${{ env.CONTAINER_NAME }} .
+        docker build -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
+
+    - name: Tag Docker image
+      run: |
+        docker tag ${{ env.ECR_REPOSITORY }}:${{ github.sha }} \
+        ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
 
     - name: Push Docker image
       run: |
-        docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSIT }}:${{ github.sha }}
-        docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSIT }}:latest
+        docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
