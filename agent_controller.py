@@ -10,8 +10,8 @@ class AgentController():
     def __init__(self):
         self.guard_agent = GuardAgent()
         self.classification_agent = ClassificationAgent()
-        self.recommendation_agent = RecommendationAgent('recommendation_objects/apriori_recommendations.json',
-                                                        'recommendation_objects/popularity_recommendation.csv'
+        self.recommendation_agent = RecommendationAgent('/recommendation_objects/apriori_recommendations.json',
+                                                        '/recommendation_objects/popularity_recommendation.csv'
                                                         )
         
         self.agent_dict: dict[str, AgentProtocol] = {
